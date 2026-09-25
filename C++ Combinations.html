@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>C++ Functions, Combinations &amp; Conditionals — Interactive Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1b1d2b; --panel:#23263a; --panel2:#282b42;
+  --code:#13141f; --line:#34375192; --line-solid:#3a3d5c;
+  --ink:#e8e8f2; --ink-dim:#9a9cbf; --ink-faint:#6c6e91;
+  --cyan:#7fd8e0; --cyan-dim:#3c5a5c;
+  --amber:#f2b263; --amber-dim:#5c4f34;
+  --lilac:#c9a6f2; --lilac-dim:#4c3d5c;
+  --green:#8fd19e; --red:#e28b8b;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --sidebar-w:250px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:76px;}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.65; min-height:100%;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+
+.topbar{display:none; position:sticky; top:0; z-index:40; background:var(--panel); border-bottom:1px solid var(--line-solid); padding:14px 16px; padding-top:calc(14px + env(safe-area-inset-top,0px)); align-items:center; justify-content:space-between; gap:12px;}
+.topbar .brand{font-family:var(--mono); font-weight:600; font-size:14px; color:var(--ink);}
+.topbar button{background:var(--panel2); border:1px solid var(--line-solid); color:var(--ink); border-radius:6px; padding:8px 10px; font-family:var(--mono); font-size:13px;}
+
+.shell{display:flex; align-items:flex-start; max-width:1180px; margin:0 auto;}
+.sidebar{width:var(--sidebar-w); flex:0 0 var(--sidebar-w); position:sticky; top:0; height:100vh; height:100dvh; overflow-y:auto; background:var(--panel); border-right:1px solid var(--line-solid); padding:22px 0 40px; padding-top:calc(22px + env(safe-area-inset-top,0px));}
+.sidebar-title{font-family:var(--mono); font-weight:600; font-size:15px; padding:0 20px 4px; color:var(--ink);}
+.sidebar-sub{font-size:12.5px; color:var(--ink-dim); padding:0 20px 20px; border-bottom:1px solid var(--line); margin-bottom:14px;}
+nav.filetree{padding:0 10px;}
+nav.filetree a{display:flex; align-items:center; gap:9px; color:var(--ink-dim); text-decoration:none; font-size:13.5px; padding:8px 10px; border-radius:6px; font-family:var(--sans);}
+nav.filetree a .dot{width:6px; height:6px; border-radius:50%; background:var(--ink-faint); flex:0 0 6px;}
+nav.filetree a:hover{background:var(--panel2); color:var(--ink);}
+nav.filetree a.active{background:var(--panel2); color:var(--ink); font-weight:600;}
+nav.filetree a.active .dot{background:var(--cyan);}
+.progress-mini{margin:18px 10px 0; padding:12px; background:var(--panel2); border:1px solid var(--line-solid); border-radius:8px;}
+.progress-mini .label{font-size:11.5px; color:var(--ink-dim); font-family:var(--mono); margin-bottom:6px; display:flex; justify-content:space-between;}
+.bar{height:6px; border-radius:4px; background:#14152080; overflow:hidden;}
+.bar > span{display:block; height:100%; background:linear-gradient(90deg,var(--cyan),var(--amber)); width:0%; transition:width .35s ease;}
+
+main{flex:1 1 auto; min-width:0; padding:48px clamp(20px,4vw,64px) 100px;}
+.hero{margin-bottom:52px;}
+.hero .eyebrow{font-family:var(--mono); color:var(--cyan); font-size:13px; margin:0 0 10px;}
+h1.page-title{font-family:var(--mono); font-size:clamp(26px,3.6vw,38px); margin:0 0 8px; line-height:1.25; font-weight:700;}
+.author-line{font-family:var(--mono); font-size:13px; color:var(--ink-faint); margin:0 0 18px;}
+.hero p{color:var(--ink-dim); font-size:16px; max-width:64ch; margin:0;}
+
+section.block{margin-bottom:64px; scroll-margin-top:76px;}
+h2.section-h{font-family:var(--mono); font-size:22px; display:flex; align-items:center; gap:12px; padding-bottom:14px; border-bottom:1px solid var(--line-solid); margin:0 0 26px;}
+h2.section-h .chip{font-size:11px; padding:3px 8px; border-radius:4px; font-family:var(--mono); font-weight:600;}
+.chip.fn{background:var(--cyan-dim); color:var(--cyan);}
+.chip.comb{background:var(--lilac-dim); color:var(--lilac);}
+.chip.cond{background:var(--amber-dim); color:var(--amber);}
+
+p{max-width:70ch;}
+ul,ol{max-width:70ch; padding-left:22px;}
+li{margin-bottom:6px;}
+
+.card-row{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:900px;}
+@media(max-width:720px){.card-row{grid-template-columns:1fr;}}
+.card{background:var(--panel); border:1px solid var(--line-solid); border-radius:10px; padding:20px;}
+.card h3{margin:0 0 10px; font-family:var(--mono); font-size:14px; color:var(--ink);}
+.card ul{margin:0; padding-left:18px; font-size:14.5px; color:var(--ink-dim);}
+.card p{font-size:14.5px; color:var(--ink-dim); margin:0;}
+
+details.topic{background:var(--panel); border:1px solid var(--line-solid); border-radius:10px; margin-bottom:12px; overflow:hidden;}
+details.topic > summary{list-style:none; cursor:pointer; padding:16px 20px; display:flex; align-items:center; gap:12px; font-family:var(--mono); font-weight:600; font-size:14.5px; color:var(--ink);}
+details.topic > summary::-webkit-details-marker{display:none;}
+details.topic > summary .arrow{transition:transform .18s ease; color:var(--ink-faint); font-size:12px;}
+details.topic[open] > summary .arrow{transform:rotate(90deg);}
+details.topic .topic-body{padding:2px 20px 22px;}
+details.topic .topic-body p{color:var(--ink-dim); font-size:15px;}
+
+pre.code{background:var(--code); border:1px solid var(--line-solid); border-radius:8px; padding:16px 18px; overflow-x:auto; font-family:var(--mono); font-size:13px; line-height:1.55; position:relative; margin:14px 0;}
+pre.code code{color:#d6d8ea; white-space:pre;}
+.code-wrap{position:relative;}
+.copy-btn{position:absolute; top:8px; right:8px; background:var(--panel2); border:1px solid var(--line-solid); color:var(--ink-dim); font-family:var(--mono); font-size:11px; padding:5px 9px; border-radius:6px; cursor:pointer;}
+.copy-btn:hover{color:var(--ink); border-color:var(--cyan);}
+.copy-btn.copied{color:var(--green); border-color:var(--green);}
+
+.callout{border-radius:8px; padding:14px 18px; margin:16px 0; border:1px solid var(--amber-dim); background:#f2b26314; font-size:14.5px; color:#e7d3ac;}
+.callout b{color:var(--amber); font-family:var(--mono); font-size:13px; display:block; margin-bottom:4px;}
+
+table.cmp{width:100%; border-collapse:collapse; margin:14px 0 4px; font-size:14px;}
+table.cmp th{background:var(--panel2); color:var(--ink); text-align:left; padding:10px 14px; font-family:var(--mono); font-size:12.5px; border-bottom:1px solid var(--line-solid);}
+table.cmp td{padding:10px 14px; border-bottom:1px solid var(--line); color:var(--ink-dim);}
+
+.quiz-card{background:var(--panel); border:1px solid var(--line-solid); border-radius:10px; padding:22px; max-width:720px;}
+.quiz-q{margin-bottom:22px;}
+.quiz-q p.qtext{font-weight:600; color:var(--ink); margin:0 0 10px; font-size:15px;}
+.quiz-opt{display:block; width:100%; text-align:left; background:var(--panel2); border:1px solid var(--line-solid); color:var(--ink-dim); padding:10px 14px; border-radius:7px; margin-bottom:8px; font-family:var(--sans); font-size:14px; cursor:pointer;}
+.quiz-opt:hover{border-color:var(--ink-faint);}
+.quiz-opt.correct{border-color:var(--green); color:var(--green); background:#8fd19e14;}
+.quiz-opt.wrong{border-color:var(--red); color:var(--red); background:#e28b8b14;}
+.quiz-opt[disabled]{cursor:default;}
+.quiz-fb{font-size:13.5px; color:var(--ink-dim); margin-top:6px; display:none;}
+.quiz-fb.show{display:block;}
+.quiz-score{font-family:var(--mono); font-size:14px; color:var(--ink); border-top:1px solid var(--line); padding-top:16px; margin-top:6px;}
+
+.lab-steps{max-width:720px;}
+.lab-step{display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border:1px solid var(--line-solid); border-radius:8px; margin-bottom:8px; background:var(--panel);}
+.lab-step input{margin-top:3px; width:16px; height:16px; accent-color:var(--cyan);}
+.lab-step label{font-size:14.5px; color:var(--ink-dim); cursor:pointer;}
+.lab-step.done label{color:var(--ink-faint); text-decoration:line-through;}
+.lab-progress{max-width:720px; background:var(--panel2); border:1px solid var(--line-solid); border-radius:8px; padding:14px 16px; margin-bottom:18px;}
+.lab-progress .l{display:flex; justify-content:space-between; font-family:var(--mono); font-size:12.5px; color:var(--ink-dim); margin-bottom:8px;}
+
+textarea.answer{width:100%; max-width:720px; background:var(--code); border:1px solid var(--line-solid); color:var(--ink); border-radius:8px; padding:12px 14px; font-family:var(--sans); font-size:14px; min-height:70px; resize:vertical;}
+textarea.answer:focus{outline:2px solid var(--cyan); outline-offset:1px;}
+.autosave-note{font-size:12px; color:var(--ink-faint); margin-top:4px;}
+.gq{margin-bottom:22px; max-width:720px;}
+.gq .qn{font-family:var(--mono); font-size:13px; color:var(--amber); margin-bottom:6px;}
+
+table.rubric{width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px;}
+table.rubric th{background:var(--panel2); text-align:left; padding:10px 12px; font-family:var(--mono); font-size:12px; color:var(--ink); border-bottom:1px solid var(--line-solid);}
+table.rubric td{padding:10px 12px; border-bottom:1px solid var(--line); color:var(--ink-dim); vertical-align:top;}
+.total-pts{font-family:var(--mono); color:var(--ink); margin-top:6px;}
+
+footer{border-top:1px solid var(--line-solid); margin-top:20px; padding:24px clamp(20px,4vw,64px) 60px; color:var(--ink-faint); font-size:13px; font-family:var(--mono);}
+:focus-visible{outline:2px solid var(--cyan); outline-offset:2px;}
+
+@media (max-width:880px){
+  .topbar{display:flex;}
+  .sidebar{position:fixed; left:-280px; top:0; z-index:50; width:260px; transition:left .2s ease; box-shadow:0 0 40px #00000080;}
+  .sidebar.open{left:0;}
+  main{padding:32px 18px 90px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand">&lt;/&gt; cpp-module-2.h</span>
+  <button id="navToggle" aria-label="Toggle navigation">☰ Menu</button>
+</div>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-title">Functions, Combinations &amp; Conditionals</div>
+    <div class="sidebar-sub">Interactive learning module</div>
+    <nav class="filetree" id="filetree">
+      <a href="#overview"><span class="dot"></span>Overview</a>
+      <a href="#functions"><span class="dot"></span>1. Functions</a>
+      <a href="#combinations"><span class="dot"></span>2. Combinations</a>
+      <a href="#conditionals"><span class="dot"></span>3. Conditionals &amp; Math</a>
+      <a href="#quiz"><span class="dot"></span>Concept Check</a>
+      <a href="#lab"><span class="dot"></span>Lab Activity</a>
+    </nav>
+    <div class="progress-mini">
+      <div class="label"><span>Your progress</span><span id="progPct">0%</span></div>
+      <div class="bar"><span id="progBar"></span></div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="hero" id="overview">
+      <p class="eyebrow">// instructional module</p>
+      <h1 class="page-title">C++ Functions, Combinations, and Conditional Statements with Math</h1>
+      <p class="author-line">By Engr. Lee-Mher Binay-an</p>
+      <p>Functions let you package reusable logic. The combination (nCr) formula gives that logic something concrete to compute. Conditional statements and C++'s math library make the whole thing robust. Work through all three lessons, check your understanding, then build the lab.</p>
+
+      <div class="card-row" style="margin-top:28px;">
+        <div class="card">
+          <h3>Learning objectives</h3>
+          <ul>
+            <li>Declare/define functions; pass by value vs. reference</li>
+            <li>Build factorial() and combination() (nCr)</li>
+            <li>Use if / else if / switch to control flow</li>
+            <li>Apply relational &amp; logical operators</li>
+            <li>Use &lt;cmath&gt; functions like pow() and sqrt()</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Prerequisites</h3>
+          <p>Completion of the C++ Structures and Classes/Objects module, or equivalent comfort with basic C++ syntax, variables, and loops.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="functions">
+      <h2 class="section-h"><span class="chip fn">function</span> Lesson 1 — C++ Functions</h2>
+
+      <details class="topic" open>
+        <summary><span class="arrow">▶</span>1.1 What is a function?</summary>
+        <div class="topic-body">
+          <p>A function is a named, reusable block of code that performs a specific task. Write the logic once, call it whenever you need it — shorter, more readable, easier-to-fix programs.</p>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>1.2 Declaration and definition</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>// Function prototype (declaration)
+int add(int a, int b);
+
+// Function definition
+int add(int a, int b) {
+    return a + b;
+}</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>1.3 Calling a function</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int sum = add(5, 3);
+    cout &lt;&lt; "Sum: " &lt;&lt; sum &lt;&lt; endl;
+    return 0;
+}</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>1.4 Void functions</summary>
+        <div class="topic-body">
+          <p>A void function performs an action without returning a value.</p>
+          <div class="code-wrap"><pre class="code"><code>void greet(string name) {
+    cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "!" &lt;&lt; endl;
+}</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>1.5 Pass by value vs. by reference</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>void addOne(int x) {        // pass by value
+    x = x + 1;               // only changes the local copy
+}
+
+void addOneRef(int &amp;x) {    // pass by reference
+    x = x + 1;               // changes the original variable
+}</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>1.6 Default arguments</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>double power(double base, int exponent = 2) {
+    double result = 1;
+    for (int i = 0; i &lt; exponent; i++) result *= base;
+    return result;
+}
+
+power(5);       // uses default exponent = 2 → 25
+power(2, 3);    // → 8</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>1.7 Function overloading</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>int square(int n) { return n * n; }
+double square(double n) { return n * n; }</code></pre><button class="copy-btn">Copy</button></div>
+          <div class="callout"><b>Key point</b>A function's signature is its name plus parameter types. Overloaded functions must differ in signature — return type alone isn't enough.</div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>1.8 Lesson summary</summary>
+        <div class="topic-body">
+          <ul>
+            <li>Functions package reusable logic; can return a value or be void</li>
+            <li>Arguments pass by value (copy) or by reference (original)</li>
+            <li>Default arguments and overloading add flexibility</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="block" id="combinations">
+      <h2 class="section-h"><span class="chip comb">nCr</span> Lesson 2 — C++ Combinations</h2>
+
+      <details class="topic" open>
+        <summary><span class="arrow">▶</span>2.1 The combination formula</summary>
+        <div class="topic-body">
+          <p>A combination counts how many ways to choose r items from n, where order doesn't matter: <b>nCr = n! / (r!(n−r)!)</b>. This lesson uses that formula as a hands-on exercise in writing and reusing functions.</p>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>2.2 Step 1 — a factorial function</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>long long factorial(int n) {
+    long long result = 1;
+    for (int i = 2; i &lt;= n; i++) {
+        result *= i;
+    }
+    return result;
+}</code></pre><button class="copy-btn">Copy</button></div>
+          <div class="callout"><b>Key point</b>0! and 1! both equal 1 — when n is 0 or 1, the loop body never runs, so result stays 1.</div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>2.3 Step 2 — the combination function</summary>
+        <div class="topic-body">
+          <p>combination() calls factorial() three times — one function reusing another.</p>
+          <div class="code-wrap"><pre class="code"><code>long long combination(int n, int r) {
+    return factorial(n) / (factorial(r) * factorial(n - r));
+}</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>2.4 Step 3 — put it together</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>#include &lt;iostream&gt;
+using namespace std;
+
+long long factorial(int n) {
+    long long result = 1;
+    for (int i = 2; i &lt;= n; i++) result *= i;
+    return result;
+}
+
+long long combination(int n, int r) {
+    return factorial(n) / (factorial(r) * factorial(n - r));
+}
+
+int main() {
+    int n = 5, r = 2;
+    cout &lt;&lt; n &lt;&lt; "C" &lt;&lt; r &lt;&lt; " = " &lt;&lt; combination(n, r) &lt;&lt; endl;
+    return 0;
+}</code></pre><button class="copy-btn">Copy</button></div>
+          <p>Output: <code>5C2 = 10</code> — 10 ways to choose 2 items out of 5.</p>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>2.5 Lesson summary</summary>
+        <div class="topic-body">
+          <ul>
+            <li>nCr counts ways to choose r items from n, order doesn't matter</li>
+            <li>Splitting out factorial() first keeps combination() short and readable</li>
+            <li>A practical example of one function calling another</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="block" id="conditionals">
+      <h2 class="section-h"><span class="chip cond">if / switch</span> Lesson 3 — Conditionals &amp; Math</h2>
+
+      <details class="topic" open>
+        <summary><span class="arrow">▶</span>3.1–3.2 if, if-else, else if</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>if (r &gt; n) {
+    cout &lt;&lt; "r cannot be greater than n." &lt;&lt; endl;
+} else if (r &lt; 0 || n &lt; 0) {
+    cout &lt;&lt; "n and r must not be negative." &lt;&lt; endl;
+} else {
+    cout &lt;&lt; "Valid input." &lt;&lt; endl;
+}</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>3.3 Relational &amp; logical operators</summary>
+        <div class="topic-body">
+          <table class="cmp">
+            <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+            <tr><td>== / !=</td><td>Equal / not equal</td><td>n == 0</td></tr>
+            <tr><td>&gt; &lt; &gt;= &lt;=</td><td>Greater/less (or equal)</td><td>r &gt; n</td></tr>
+            <tr><td>&amp;&amp;</td><td>Logical AND</td><td>r &gt;= 0 &amp;&amp; r &lt;= n</td></tr>
+            <tr><td>||</td><td>Logical OR</td><td>r &lt; 0 || n &lt; 0</td></tr>
+            <tr><td>!</td><td>Logical NOT</td><td>!(r &gt; n)</td></tr>
+          </table>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>3.4 The switch statement</summary>
+        <div class="topic-body">
+          <div class="code-wrap"><pre class="code"><code>switch (choice) {
+    case 1:
+        cout &lt;&lt; "You chose Add." &lt;&lt; endl;
+        break;
+    case 2:
+        cout &lt;&lt; "You chose Subtract." &lt;&lt; endl;
+        break;
+    default:
+        cout &lt;&lt; "Invalid choice." &lt;&lt; endl;
+}</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>3.5 Math functions from &lt;cmath&gt;</summary>
+        <div class="topic-body">
+          <table class="cmp">
+            <tr><th>Function</th><th>Purpose</th><th>Example</th></tr>
+            <tr><td>pow(base, exp)</td><td>Power</td><td>pow(2,3) → 8</td></tr>
+            <tr><td>sqrt(x)</td><td>Square root</td><td>sqrt(9) → 3</td></tr>
+            <tr><td>abs(x)</td><td>Absolute value</td><td>abs(-5) → 5</td></tr>
+            <tr><td>ceil(x) / floor(x)</td><td>Round up / down</td><td>ceil(4.2) → 5</td></tr>
+          </table>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>3.6 Validating combination input</summary>
+        <div class="topic-body">
+          <p>Conditionals catch bad input before it reaches your calculation — here, before calling combination() from Lesson 2.</p>
+          <div class="code-wrap"><pre class="code"><code>if (n &lt; 0 || r &lt; 0) {
+    cout &lt;&lt; "n and r must not be negative." &lt;&lt; endl;
+} else if (r &gt; n) {
+    cout &lt;&lt; "r cannot be greater than n." &lt;&lt; endl;
+} else {
+    cout &lt;&lt; n &lt;&lt; "C" &lt;&lt; r &lt;&lt; " = " &lt;&lt; combination(n, r) &lt;&lt; endl;
+}</code></pre><button class="copy-btn">Copy</button></div>
+        </div>
+      </details>
+
+      <details class="topic">
+        <summary><span class="arrow">▶</span>3.7 Lesson summary</summary>
+        <div class="topic-body">
+          <ul>
+            <li>if / else if / switch branch a program based on conditions</li>
+            <li>Relational &amp; logical operators build the conditions</li>
+            <li>&lt;cmath&gt; supplies pow(), sqrt(), abs(), and more</li>
+            <li>Validating input prevents incorrect or crashing results</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="block" id="quiz">
+      <h2 class="section-h">✓ Concept Check</h2>
+      <p>Five quick questions before the lab. Pick an answer to see instant feedback.</p>
+      <div class="quiz-card" id="quizCard"></div>
+    </section>
+
+    <section class="block" id="lab">
+      <h2 class="section-h">🧪 Lab Activity — Combination Calculator</h2>
+      <p><b>Objective:</b> compute nCr with your own <code>factorial()</code> and <code>combination()</code> functions, validate input with conditionals, and use at least one <code>&lt;cmath&gt;</code> function.</p>
+
+      <h3 style="font-family:var(--mono); font-size:15px; margin-top:28px;">Checklist</h3>
+      <div class="lab-progress">
+        <div class="l"><span>Steps completed</span><span id="labPct">0 / 10</span></div>
+        <div class="bar"><span id="labBar"></span></div>
+      </div>
+      <div class="lab-steps" id="labSteps"></div>
+
+      <h3 style="font-family:var(--mono); font-size:15px; margin-top:34px;">Starter code</h3>
+      <p>Fill in the <code>/* TODO */</code> parts.</p>
+      <div class="code-wrap"><pre class="code"><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+using namespace std;
+
+// Step 2: factorial function
+long long factorial(int n) {
+    /* TODO: compute and return n! using a loop */
+}
+
+// Step 3: combination function (reuses factorial)
+long long combination(int n, int r) {
+    /* TODO: return n! / (r! * (n-r)!) using factorial() */
+}
+
+int main() {
+    int choice;
+
+    do {
+        int n, r;
+        cout &lt;&lt; "Enter n and r: ";
+        cin &gt;&gt; n &gt;&gt; r;
+
+        // Step 5: validate input
+        if (n &lt; 0 || r &lt; 0) {
+            cout &lt;&lt; "n and r must not be negative." &lt;&lt; endl;
+        } else if (r &gt; n) {
+            cout &lt;&lt; "r cannot be greater than n." &lt;&lt; endl;
+        } else {
+            // Step 6: compute and display
+            long long result = combination(n, r);
+            cout &lt;&lt; n &lt;&lt; "C" &lt;&lt; r &lt;&lt; " = " &lt;&lt; result &lt;&lt; endl;
+
+            // Step 8: use a &lt;cmath&gt; function somewhere here
+            /* TODO: e.g. show log10(result) as the result's magnitude */
+        }
+
+        cout &lt;&lt; "1-Compute again  2-Exit: ";
+        cin &gt;&gt; choice;
+
+    } while (choice != 2);
+
+    cout &lt;&lt; "Program ended." &lt;&lt; endl;
+    return 0;
+}</code></pre><button class="copy-btn">Copy</button></div>
+
+      <h3 style="font-family:var(--mono); font-size:15px; margin-top:30px;">Expected output</h3>
+      <div class="code-wrap"><pre class="code"><code>Enter n and r: 5 2
+5C2 = 10
+Magnitude (log10): 1
+1-Compute again  2-Exit: 1
+Enter n and r: 4 7
+r cannot be greater than n.
+1-Compute again  2-Exit: 2
+Program ended.</code></pre><button class="copy-btn">Copy</button></div>
+
+      <h3 style="font-family:var(--mono); font-size:15px; margin-top:34px;">Guide questions</h3>
+      <p style="font-size:14px;">Notes save automatically in this browser.</p>
+      <div id="guideQs"></div>
+
+      <h3 style="font-family:var(--mono); font-size:15px; margin-top:30px;">Assessment rubric</h3>
+      <table class="rubric">
+        <tr><th>Criteria</th><th>Excellent</th><th>Needs improvement</th></tr>
+        <tr><td>Functions</td><td>factorial() &amp; combination() correctly defined and reused (10 pts)</td><td>Missing or logic inlined (0–5)</td></tr>
+        <tr><td>Conditionals</td><td>Input validated for all edge cases (10 pts)</td><td>Validation missing/incomplete (0–5)</td></tr>
+        <tr><td>Math library</td><td>&lt;cmath&gt; function used correctly (10 pts)</td><td>Missing or misused (0–5)</td></tr>
+        <tr><td>Functionality</td><td>Compiles, runs, correct for all test cases (10 pts)</td><td>Errors or wrong output (0–5)</td></tr>
+        <tr><td>Readability</td><td>Clear comments throughout (10 pts)</td><td>Little/no comments (0–5)</td></tr>
+      </table>
+      <p class="total-pts">Total: 50 points</p>
+
+      <div class="callout" style="margin-top:20px;"><b>Submission reminder</b>Submit your saved .cpp file with your guide-question answers as instructed by your teacher.</div>
+    </section>
+  </main>
+</div>
+
+<footer>Author: Engr. Lee-Mher Binay-an — // end of module — happy coding</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var sidebar = document.getElementById('sidebar');
+  var toggle = document.getElementById('navToggle');
+  toggle.addEventListener('click', function(){ sidebar.classList.toggle('open'); });
+  document.getElementById('filetree').addEventListener('click', function(e){
+    if (e.target.tagName === 'A') sidebar.classList.remove('open');
+  });
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('#filetree a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var idx = 0;
+    sections.forEach(function(s,i){ if (s && s.offsetTop <= pos) idx = i; });
+    links.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var code = btn.previousElementSibling.innerText;
+      navigator.clipboard.writeText(code).then(function(){
+        btn.textContent = 'Copied'; btn.classList.add('copied');
+        setTimeout(function(){ btn.textContent='Copy'; btn.classList.remove('copied'); }, 1500);
+      }).catch(function(){ btn.textContent = 'Press Ctrl+C'; });
+    });
+  });
+
+  function load(key, fallback){
+    try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+    catch(e){ return fallback; }
+  }
+  function save(key, val){
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){}
+  }
+
+  function updateOverallProgress(){
+    var quizDone = load('cpp2_quiz_done', []).length;
+    var labDone = load('cpp2_lab_steps', []).filter(Boolean).length;
+    var total = 5 + 10;
+    var pct = Math.round(((quizDone + labDone) / total) * 100);
+    document.getElementById('progPct').textContent = pct + '%';
+    document.getElementById('progBar').style.width = pct + '%';
+  }
+
+  var quizData = [
+    {q:"A void function is one that:", opts:["Always returns 0","Does not return a value","Cannot take parameters","Runs automatically at program start"], a:1,
+     fb:"Void functions perform an action but send nothing back to the caller."},
+    {q:"Which symbol makes a parameter passed by reference?", opts:["*","&","%","::"], a:1,
+     fb:"Adding & to a parameter lets the function modify the original variable."},
+    {q:"What is 5! (factorial of 5)?", opts:["25","60","120","720"], a:2,
+     fb:"5! = 5×4×3×2×1 = 120."},
+    {q:"Which statement is cleanest for comparing one variable against several exact values?", opts:["A nested for loop","switch","A while loop","A reference parameter"], a:1,
+     fb:"switch is a clean alternative to a long if-else chain for exact-value comparisons."},
+    {q:"Which header provides pow(), sqrt(), and abs()?", opts:["<iostream>","<string>","<cmath>","<vector>"], a:2,
+     fb:"<cmath> supplies C++'s built-in math functions."}
+  ];
+  var quizCard = document.getElementById('quizCard');
+  var quizDoneArr = load('cpp2_quiz_done', []);
+  quizData.forEach(function(item, qi){
+    var wrap = document.createElement('div');
+    wrap.className = 'quiz-q';
+    var already = quizDoneArr[qi] !== undefined;
+    var html = '<p class="qtext">' + (qi+1) + '. ' + item.q + '</p>';
+    item.opts.forEach(function(opt, oi){
+      var cls = 'quiz-opt';
+      if (already) {
+        if (oi === item.a) cls += ' correct';
+        else if (oi === quizDoneArr[qi] && oi !== item.a) cls += ' wrong';
+      }
+      html += '<button class="'+cls+'" data-qi="'+qi+'" data-oi="'+oi+'" '+(already?'disabled':'')+'>'+opt+'</button>';
+    });
+    html += '<div class="quiz-fb'+(already?' show':'')+'" id="fb'+qi+'">'+item.fb+'</div>';
+    wrap.innerHTML = html;
+    quizCard.appendChild(wrap);
+  });
+  var scoreEl = document.createElement('div');
+  scoreEl.className = 'quiz-score';
+  quizCard.appendChild(scoreEl);
+  function renderScore(){
+    var arr = load('cpp2_quiz_done', []);
+    var correct = 0, answered = 0;
+    quizData.forEach(function(item, i){ if (arr[i] !== undefined){ answered++; if (arr[i]===item.a) correct++; }});
+    scoreEl.textContent = 'Score: ' + correct + ' / ' + quizData.length + ' correct (' + answered + ' answered)';
+  }
+  renderScore();
+  quizCard.addEventListener('click', function(e){
+    if (!e.target.classList.contains('quiz-opt') || e.target.disabled) return;
+    var qi = +e.target.dataset.qi, oi = +e.target.dataset.oi;
+    var item = quizData[qi];
+    var buttons = quizCard.querySelectorAll('.quiz-opt[data-qi="'+qi+'"]');
+    buttons.forEach(function(b){
+      b.disabled = true;
+      var boi = +b.dataset.oi;
+      if (boi === item.a) b.classList.add('correct');
+      else if (boi === oi) b.classList.add('wrong');
+    });
+    document.getElementById('fb'+qi).classList.add('show');
+    var arr = load('cpp2_quiz_done', []);
+    arr[qi] = oi;
+    save('cpp2_quiz_done', arr);
+    renderScore();
+    updateOverallProgress();
+  });
+
+  var labStepsText = [
+    "Create a new source file named LabActivity2_YourName.cpp",
+    "Write factorial(int n) returning n! using a loop",
+    "Write combination(int n, int r) that calls factorial()",
+    "Prompt the user for n and r in main()",
+    "Validate input with if/else if (reject negatives and r > n)",
+    "Call combination(n, r) and display the result",
+    "Add a switch-based menu: compute again or exit",
+    "Use at least one <cmath> function anywhere in the program",
+    "Test a normal, an edge, and an invalid case",
+    "Add comments marking functions, conditionals, and math calls"
+  ];
+  var labStepsWrap = document.getElementById('labSteps');
+  var labState = load('cpp2_lab_steps', []);
+  labStepsText.forEach(function(text, i){
+    var row = document.createElement('div');
+    row.className = 'lab-step' + (labState[i] ? ' done' : '');
+    row.innerHTML = '<input type="checkbox" id="step'+i+'" '+(labState[i]?'checked':'')+'>' +
+                     '<label for="step'+i+'">'+text+'</label>';
+    labStepsWrap.appendChild(row);
+  });
+  function updateLabProgress(){
+    var state = load('cpp2_lab_steps', []);
+    var done = state.filter(Boolean).length;
+    document.getElementById('labPct').textContent = done + ' / ' + labStepsText.length;
+    document.getElementById('labBar').style.width = Math.round(done/labStepsText.length*100) + '%';
+  }
+  updateLabProgress();
+  labStepsWrap.addEventListener('change', function(e){
+    if (e.target.type !== 'checkbox') return;
+    var i = +e.target.id.replace('step','');
+    var state = load('cpp2_lab_steps', []);
+    state[i] = e.target.checked;
+    save('cpp2_lab_steps', state);
+    e.target.closest('.lab-step').classList.toggle('done', e.target.checked);
+    updateLabProgress();
+    updateOverallProgress();
+  });
+
+  var guideQuestions = [
+    "Which part of your program is a function, and why split factorial() and combination() into two functions?",
+    "Which conditionals validate n and r, and what happens if they're removed?",
+    "Where did you use a <cmath> function, and what did it add to the output?",
+    "Are factorial() and combination() passed by value here? Would reference make sense?",
+    "Why might very large n give an incorrect result even with correct logic? (Hint: data type.)"
+  ];
+  var gqWrap = document.getElementById('guideQs');
+  var gqAnswers = load('cpp2_gq_answers', {});
+  guideQuestions.forEach(function(q, i){
+    var block = document.createElement('div');
+    block.className = 'gq';
+    block.innerHTML = '<div class="qn">Q'+(i+1)+'. '+q+'</div>' +
+      '<textarea class="answer" data-qi="'+i+'" placeholder="Type your answer here...">'+(gqAnswers[i]||'')+'</textarea>' +
+      '<div class="autosave-note">Saved locally in this browser</div>';
+    gqWrap.appendChild(block);
+  });
+  gqWrap.addEventListener('input', function(e){
+    if (!e.target.classList.contains('answer')) return;
+    var i = e.target.dataset.qi;
+    var answers = load('cpp2_gq_answers', {});
+    answers[i] = e.target.value;
+    save('cpp2_gq_answers', answers);
+  });
+
+  updateOverallProgress();
+})();
+</script>
+</body>
+</html>
